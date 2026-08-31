@@ -1,0 +1,4 @@
+// This would be a base64 encoded image, but for demo purposes we'll use a gradient background
+.bg-university {
+    background: linear-gradient(45deg, #f3f4f6 0%, #e5e7eb 100%);
+}
