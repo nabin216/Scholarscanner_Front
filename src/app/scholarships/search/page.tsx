@@ -7,6 +7,8 @@ import { FilterOptions } from '../../../types/filterOptions';
 import Link from 'next/link';
 import { useAuth } from '../../Authentication/context/AuthContext';
 
+const PAGE_SIZE = 20;
+
 const ScholarshipSearchContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -46,6 +48,9 @@ const ScholarshipSearchContent = () => {
   const [savingScholarships, setSavingScholarships] = useState<Set<number>>(new Set());
   const [savedScholarships, setSavedScholarships] = useState<Set<number>>(new Set());
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   // Update filters when URL parameters change (for subsequent navigations)
   useEffect(() => {
@@ -94,45 +99,63 @@ const ScholarshipSearchContent = () => {
     fetchFilterOptions();
   }, []);
 
-  // Fetch scholarships based on filters
+  // Go back to the first page whenever the filters or sort order change
   useEffect(() => {
+    setPage(1);
+  }, [filters, sortConfig]);
+
+  // Fetch one page of scholarships; filtering, sorting and paging all happen on the server
+  useEffect(() => {
+    let ignore = false;  // drop responses from requests that have been superseded
+
     const fetchScholarships = async () => {
       try {        setLoading(true);
         const queryParams = new URLSearchParams();
-        
+
         // Add each filter value if it exists
         Object.entries(filters).forEach(([key, value]) => {
           if (value) {
             queryParams.append(key, value);
           }
         });
-        
+
+        const orderingField = sortConfig.field === 'country' ? 'country__name' : sortConfig.field;
+        queryParams.append('ordering', `${sortConfig.direction === 'desc' ? '-' : ''}${orderingField}`);
+        queryParams.append('page', String(page));
+        queryParams.append('page_size', String(PAGE_SIZE));
+
         const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/scholarships/?${queryParams}`;
-        console.log('Fetching scholarships with URL:', apiUrl);
-        
+
         const response = await fetch(apiUrl);
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
-        console.log('Scholarships data:', data);
-        
+        if (ignore) return;
+
         // Handle both paginated and non-paginated responses
         const scholarshipsList = data.results || data;
-        setScholarships(Array.isArray(scholarshipsList) ? scholarshipsList : []);
-        
+        const list = Array.isArray(scholarshipsList) ? scholarshipsList : [];
+        setScholarships(list);
+        setTotalCount(typeof data.count === 'number' ? data.count : list.length);
+        setError(null);
+
       } catch (error) {
+        if (ignore) return;
         console.error('Error fetching scholarships:', error);
         setError(error instanceof Error ? error.message : 'Failed to fetch scholarships');
       } finally {
-        setLoading(false);
+        if (!ignore) setLoading(false);
       }
     };
 
     fetchScholarships();
-  }, [filters]);
+    return () => {
+      ignore = true;
+    };
+  }, [filters, sortConfig, page]);
 
   // Fetch saved scholarships for authenticated users
   useEffect(() => {
@@ -269,42 +292,26 @@ const ScholarshipSearchContent = () => {
     });
     setIsDropdownOpen(false);
   };
-  const sortScholarships = (scholarships: Scholarship[]) => {
-    console.log('Sorting scholarships:', { 
-      count: scholarships.length, 
-      sortConfig,
-      sampleTitles: scholarships.slice(0, 3).map(s => s.title)
-    });
-    
-    return [...scholarships].sort((a, b) => {
-      switch (sortConfig.field) {
-        case 'deadline':
-          const deadlineA = new Date(a.deadline).getTime();
-          const deadlineB = new Date(b.deadline).getTime();
-          return sortConfig.direction === 'asc' ? deadlineA - deadlineB : deadlineB - deadlineA;
-        case 'title':
-          return sortConfig.direction === 'asc' 
-            ? a.title.localeCompare(b.title)
-            : b.title.localeCompare(a.title);
-        case 'country':
-          return sortConfig.direction === 'asc' 
-            ? (a.country_name || '').localeCompare(b.country_name || '')
-            : (b.country_name || '').localeCompare(a.country_name || '');
-        case 'open_date':
-          return sortConfig.direction === 'asc' 
-            ? new Date(a.open_date || '').getTime() - new Date(b.open_date || '').getTime()
-            : new Date(b.open_date || '').getTime() - new Date(a.open_date || '').getTime();
-        case 'created_at':
-          return sortConfig.direction === 'asc' 
-            ? new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-            : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-        default:
-          return 0;
-      }
-    });
+  // Results arrive already sorted by the server (see the ordering param in fetchScholarships)
+  const sortedScholarships = scholarships;
+
+  const goToPage = (n: number) => {
+    setPage(Math.min(Math.max(1, n), totalPages));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const sortedScholarships = sortScholarships(scholarships);
+  // First, last and the pages around the current one, with null marking a gap
+  const pageNumbers = (): (number | null)[] => {
+    const pages: (number | null)[] = [];
+    for (let n = 1; n <= totalPages; n++) {
+      if (n === 1 || n === totalPages || Math.abs(n - page) <= 1) {
+        pages.push(n);
+      } else if (pages[pages.length - 1] !== null) {
+        pages.push(null);
+      }
+    }
+    return pages;
+  };
 
   const activeFiltersCount = Object.values(filters).filter(value => value !== '').length;
   return (
@@ -503,7 +510,9 @@ const ScholarshipSearchContent = () => {
                     Search Scholarships
                   </h1>
                   <p className="text-gray-600 mt-1 text-sm sm:text-base">
-                    {loading ? 'Loading...' : `${scholarships.length} scholarships found`}
+                    {loading
+                      ? 'Loading...'
+                      : `${totalCount} scholarships found${totalPages > 1 ? ` · page ${page} of ${totalPages}` : ''}`}
                   </p>
                 </div>                {/* Sort Dropdown */}
                 <div className="relative w-full sm:w-auto sort-dropdown">
@@ -850,6 +859,45 @@ const ScholarshipSearchContent = () => {
                   </div>
                 )}
               </div>
+            )}
+
+            {/* Pagination */}
+            {!error && totalPages > 1 && (
+              <nav className="mt-6 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination">
+                <button
+                  onClick={() => goToPage(page - 1)}
+                  disabled={page === 1 || loading}
+                  className="px-3 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  ← Previous
+                </button>
+                {pageNumbers().map((n, i) =>
+                  n === null ? (
+                    <span key={`gap-${i}`} className="px-2 text-gray-500">…</span>
+                  ) : (
+                    <button
+                      key={n}
+                      onClick={() => goToPage(n)}
+                      disabled={loading}
+                      aria-current={n === page ? 'page' : undefined}
+                      className={`min-w-[2.5rem] px-3 py-2 text-sm font-medium rounded-md border ${
+                        n === page
+                          ? 'bg-blue-600 border-blue-600 text-white'
+                          : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {n}
+                    </button>
+                  )
+                )}
+                <button
+                  onClick={() => goToPage(page + 1)}
+                  disabled={page === totalPages || loading}
+                  className="px-3 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next →
+                </button>
+              </nav>
             )}
           </div>
         </div>
