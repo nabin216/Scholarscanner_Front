@@ -2,7 +2,7 @@
 export const dynamic = 'force-static';
 
 export function GET() {
-  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT; // ca-pub-1234567890123456
+  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-3332315663614383';
   const body = client
     ? `google.com, ${client.replace(/^ca-/, '')}, DIRECT, f08c47fec0942fa0\n`
     : '# AdSense publisher id not configured yet\n';

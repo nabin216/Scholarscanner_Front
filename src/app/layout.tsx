@@ -7,9 +7,8 @@ import AIAssistant from '../components/AIAssistant';
 import { AuthProvider } from './Authentication/context/AuthContext';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://scholarscanner.com';
-// Google AdSense publisher id, e.g. ca-pub-1234567890123456 (set in the deploy workflow).
-// The workflow passes an empty string until it is configured; treat that as "not set".
-const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || null;
+// Google AdSense publisher id; the deploy workflow can override it (an empty value falls back to this one).
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-3332315663614383';
 
 const DESCRIPTION =
   'Find fully funded and partial scholarships for bachelor’s, master’s and PhD study abroad. Search prestigious government, university and foundation scholarships by country, level and field, with deadlines and official links.';
