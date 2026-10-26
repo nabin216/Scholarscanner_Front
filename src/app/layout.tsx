@@ -7,8 +7,9 @@ import AIAssistant from '../components/AIAssistant';
 import { AuthProvider } from './Authentication/context/AuthContext';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://scholarscanner.com';
-// Google AdSense publisher id, e.g. ca-pub-1234567890123456 (set in the deploy workflow)
-const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+// Google AdSense publisher id, e.g. ca-pub-1234567890123456 (set in the deploy workflow).
+// The workflow passes an empty string until it is configured; treat that as "not set".
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || null;
 
 const DESCRIPTION =
   'Find fully funded and partial scholarships for bachelor’s, master’s and PhD study abroad. Search prestigious government, university and foundation scholarships by country, level and field, with deadlines and official links.';
@@ -73,13 +74,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {ADSENSE_CLIENT && (
+        {ADSENSE_CLIENT ? (
           <script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
             crossOrigin="anonymous"
           />
-        )}
+        ) : null}
       </head>
       <body>
         <AuthProvider>
