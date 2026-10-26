@@ -76,7 +76,7 @@ const HomePage = async () => {
                 <div className="relative bg-cover bg-center rounded-none py-16" style={{ 
                     backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 15%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.1) 85%, rgba(0,0,0,0.5) 100%), url("${basePath}/images/university.jpg")`
                 }}>                    <div className="container mx-auto">
-                        <div className="text-center mb-16 mx-auto max-w-3xl rounded-2xl bg-white/80 backdrop-blur-sm px-5 py-6 sm:px-8 shadow-sm">
+                        <div className="text-center mb-16 mx-auto max-w-3xl rounded-2xl bg-white/55 backdrop-blur-md backdrop-saturate-150 ring-1 ring-white/60 px-5 py-6 sm:px-8 shadow-lg shadow-black/10">
                             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
                                 Find your scholarship with ScholarScanner
                             </h1>
