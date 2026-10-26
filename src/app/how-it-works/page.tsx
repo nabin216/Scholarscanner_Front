@@ -172,11 +172,11 @@ const HowItWorks = () => {
           <h2 className="text-2xl font-bold mb-8 text-center">What you get</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold mb-2">100+</div>
+              <div className="text-3xl font-bold mb-2">1000+</div>
               <div className="text-blue-100">Prestigious scholarships</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold mb-2">30+</div>
+              <div className="text-3xl font-bold mb-2">70+</div>
               <div className="text-blue-100">Host countries</div>
             </div>
             <div className="text-center">

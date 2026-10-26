@@ -62,10 +62,17 @@ const HomePage = async () => {
         }
     ];
 
+    // Round live numbers down to a headline figure, e.g. 1008 -> "1000+", 71 -> "70+"
+    const headline = (n: number | null, fallback: string) => {
+        if (!n) return fallback;
+        const step = n >= 1000 ? 100 : 10;
+        return `${Math.floor(n / step) * step}+`;
+    };
+
     const stats = [
-        { number: live.total ? `${live.total}` : '100+', label: 'Scholarships listed' },
-        { number: live.countries ? `${live.countries}` : '30+', label: 'Host countries' },
-        { number: live.fullyFunded ? `${live.fullyFunded}` : '70+', label: 'Fully funded options' },
+        { number: headline(live.total, '1000+'), label: 'Scholarships listed' },
+        { number: headline(live.countries, '70+'), label: 'Host countries' },
+        { number: headline(live.fullyFunded, '700+'), label: 'Fully funded options' },
         { number: '100%', label: 'Free for students' }
     ];
 

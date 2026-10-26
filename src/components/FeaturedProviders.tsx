@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import './scrollbar-hide.css';
 
 interface FeaturedScholarship {
@@ -17,6 +16,7 @@ interface FeaturedScholarship {
 }
 
 const DEFAULT_IMAGE = '/images/providers/scholarship-default.jpg';
+const SHOWN = 20;
 
 const formatDeadline = (date?: string) =>
   date ? new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -25,15 +25,14 @@ const FeaturedProviders = () => {
   const [scholarships, setScholarships] = useState<FeaturedScholarship[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-  const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
+        // Featured scholarships still open, soonest deadline first
+        const today = new Date().toISOString().slice(0, 10);
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/scholarships/?is_featured=true&ordering=deadline&page_size=20`
+          `${process.env.NEXT_PUBLIC_API_URL}/scholarships/?is_featured=true&deadline_after=${today}&ordering=deadline&page_size=${SHOWN}`
         );
         if (!response.ok) {
           throw new Error(`Failed to fetch featured scholarships: ${response.status}`);
@@ -51,26 +50,6 @@ const FeaturedProviders = () => {
     fetchFeatured();
   }, []);
 
-  // Show or hide the arrow buttons depending on where the track is scrolled to
-  const updateArrows = () => {
-    const track = trackRef.current;
-    if (!track) return;
-    setCanScrollLeft(track.scrollLeft > 4);
-    setCanScrollRight(track.scrollLeft + track.clientWidth < track.scrollWidth - 4);
-  };
-
-  useEffect(() => {
-    updateArrows();
-    window.addEventListener('resize', updateArrows);
-    return () => window.removeEventListener('resize', updateArrows);
-  }, [scholarships]);
-
-  const scrollByPage = (direction: 1 | -1) => {
-    const track = trackRef.current;
-    if (!track) return;
-    track.scrollBy({ left: direction * track.clientWidth * 0.9, behavior: 'smooth' });
-  };
-
   if (error) {
     return <p className="text-gray-500">{error}</p>;
   }
@@ -80,18 +59,14 @@ const FeaturedProviders = () => {
   }
 
   return (
-    <div className="relative">
-      <div
-        ref={trackRef}
-        onScroll={updateArrows}
-        className="featured-track scrollbar-hide"
-        aria-label="Featured scholarships"
-      >
+    <div>
+      {/* 2 per row on phones, 3 on tablets, 5 on desktop */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4" aria-label="Featured scholarships">
         {loading
-          ? Array.from({ length: 5 }).map((_, index) => (
-              <div key={index} className="featured-card rounded-xl bg-white shadow-sm overflow-hidden animate-pulse">
+          ? Array.from({ length: 10 }).map((_, index) => (
+              <div key={index} className="rounded-xl bg-white shadow-sm overflow-hidden animate-pulse">
                 <div className="aspect-[16/10] bg-gray-200" />
-                <div className="p-4 space-y-2">
+                <div className="p-3 sm:p-4 space-y-2">
                   <div className="h-4 bg-gray-200 rounded" />
                   <div className="h-4 w-2/3 bg-gray-200 rounded" />
                   <div className="h-3 w-1/2 bg-gray-200 rounded" />
@@ -104,7 +79,7 @@ const FeaturedProviders = () => {
                 <Link
                   key={scholarship.id}
                   href={`/scholarships/scholarshipdetails?id=${scholarship.slug}`}
-                  className="featured-card group flex flex-col rounded-xl bg-white shadow-sm ring-1 ring-gray-100 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                  className="group flex flex-col rounded-xl bg-white shadow-sm ring-1 ring-gray-100 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
                 >
                   <div className="relative aspect-[16/10] bg-gray-100 overflow-hidden">
                     <img
@@ -117,23 +92,23 @@ const FeaturedProviders = () => {
                       }}
                     />
                     {fullyFunded && (
-                      <span className="absolute top-2 left-2 rounded-full bg-emerald-600/90 px-2.5 py-0.5 text-xs font-semibold text-white">
+                      <span className="absolute top-2 left-2 rounded-full bg-emerald-600/90 px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-white">
                         Fully funded
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-1 flex-col p-4">
+                  <div className="flex flex-1 flex-col p-3 sm:p-4">
                     <h3 className="text-sm font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-blue-700">
                       {scholarship.title}
                     </h3>
-                    <p className="mt-1 text-xs text-gray-500">{scholarship.country_name || 'International'}</p>
-                    <div className="mt-auto pt-3 flex items-center justify-between text-xs">
+                    <p className="mt-1 text-xs text-gray-500 truncate">{scholarship.country_name || 'International'}</p>
+                    <div className="mt-auto pt-2 sm:pt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs">
                       {scholarship.deadline && (
                         <span className="text-gray-600">
                           Deadline <span className="font-medium text-gray-900">{formatDeadline(scholarship.deadline)}</span>
                         </span>
                       )}
-                      <span className="font-medium text-blue-600">View →</span>
+                      <span className="hidden sm:inline font-medium text-blue-600">View →</span>
                     </div>
                   </div>
                 </Link>
@@ -141,26 +116,15 @@ const FeaturedProviders = () => {
             })}
       </div>
 
-      {/* Arrow buttons (desktop); on touch screens the track is swiped */}
-      {canScrollLeft && (
-        <button
-          type="button"
-          onClick={() => scrollByPage(-1)}
-          aria-label="Previous scholarships"
-          className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-gray-200 text-gray-700 hover:bg-gray-50"
-        >
-          <ChevronLeftIcon className="h-5 w-5" />
-        </button>
-      )}
-      {canScrollRight && (
-        <button
-          type="button"
-          onClick={() => scrollByPage(1)}
-          aria-label="More scholarships"
-          className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-gray-200 text-gray-700 hover:bg-gray-50"
-        >
-          <ChevronRightIcon className="h-5 w-5" />
-        </button>
+      {!loading && (
+        <div className="mt-8 text-center">
+          <Link
+            href="/scholarships/search"
+            className="inline-flex items-center rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors"
+          >
+            See more scholarships
+          </Link>
+        </div>
       )}
     </div>
   );
