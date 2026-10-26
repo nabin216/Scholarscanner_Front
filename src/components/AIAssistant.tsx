@@ -184,9 +184,9 @@ export default function AIAssistant() {
           className={`fixed right-4 sm:right-6 z-40 group ${raised ? 'bottom-24 lg:bottom-6' : 'bottom-5 sm:bottom-6'}`}
         >
           <span className="absolute inset-0 rounded-full bg-indigo-500/40 animate-ping [animation-duration:2.5s] group-hover:hidden" />
-          <span className="relative flex items-center gap-2 rounded-full bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-3.5 sm:pl-4 sm:pr-5 text-white shadow-lg shadow-indigo-600/30 ring-4 ring-white transition-transform group-hover:scale-105 group-active:scale-95">
-            <SparklesIcon className="h-6 w-6" />
-            <span className="hidden sm:inline text-sm font-semibold">Ask AI</span>
+          <span className="relative flex items-center gap-2 rounded-full bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 py-2.5 pl-3 pr-4 sm:py-3.5 sm:pl-4 sm:pr-5 text-white shadow-lg shadow-indigo-600/30 ring-4 ring-white transition-transform group-hover:scale-105 group-active:scale-95">
+            <SparklesIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+            <span className="text-sm font-semibold">Ask AI</span>
           </span>
         </button>
       )}

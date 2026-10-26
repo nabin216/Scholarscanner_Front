@@ -724,11 +724,11 @@ const ScholarshipSearchContent = () => {
                           </Link>
                           
                           {/* Save button inside card */}
-                          <div className="px-3 pb-3">
+                          <div className="px-3 pb-3 flex justify-end">
                             <button
                               onClick={() => handleSaveScholarship(scholarship.id)}
                               disabled={savingScholarships.has(scholarship.id)}
-                              className={`w-full py-2 rounded-md text-sm font-medium transition-colors ${
+                              className={`py-1.5 px-3 rounded-md text-xs font-medium transition-colors ${
                                 savedScholarships.has(scholarship.id)
                                   ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
                                   : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
