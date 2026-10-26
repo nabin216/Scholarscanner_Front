@@ -138,8 +138,8 @@ const HomeSearchFilter = () => {
     };
 
     return (
-        <div className="bg-[#E8EEF7] rounded-full shadow-md flex items-center">
-            <div className="flex-1 grid grid-cols-4 divide-x divide-gray-200">                <div className="px-6 py-3">
+        <div className="bg-[#E8EEF7] rounded-2xl md:rounded-full shadow-md flex flex-col md:flex-row md:items-center p-2 md:p-0">
+            <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-px md:gap-0 md:divide-x divide-gray-200">                <div className="px-3 py-2 md:px-6 md:py-3 min-w-0">
                     <div className="text-sm font-medium text-gray-700 mb-1">Level</div>                    <select 
                         name="level"
                         value={filterValues.level}
@@ -154,7 +154,7 @@ const HomeSearchFilter = () => {
                             </option>
                         ))}
                     </select>
-                </div>                <div className="px-6 py-3">
+                </div>                <div className="px-3 py-2 md:px-6 md:py-3 min-w-0">
                     <div className="text-sm font-medium text-gray-700 mb-1">Country</div>                    <select 
                         name="country"
                         value={filterValues.country}
@@ -169,7 +169,7 @@ const HomeSearchFilter = () => {
                             </option>
                         ))}
                     </select>
-                </div>                <div className="px-6 py-3">
+                </div>                <div className="px-3 py-2 md:px-6 md:py-3 min-w-0">
                     <div className="text-sm font-medium text-gray-700 mb-1">Field</div>                    <select 
                         name="field"
                         value={filterValues.field}
@@ -185,7 +185,7 @@ const HomeSearchFilter = () => {
                         ))}
                     </select>
                 </div>
-                <div className="px-6 py-3">
+                <div className="px-3 py-2 md:px-6 md:py-3 min-w-0">
                     <div className="text-sm font-medium text-gray-700 mb-1">Deadline</div>
                     <input 
                         type="date" 
@@ -196,11 +196,13 @@ const HomeSearchFilter = () => {
                     />
                 </div>
             </div>
-            <div className="px-2">
+            <div className="md:px-2">
                 <button 
                     onClick={handleArrowClick}
-                    className="bg-[#FFE814] hover:bg-[#FFE200] text-black rounded-full h-12 w-12 flex items-center justify-center transition-colors"
+                    aria-label="Search scholarships"
+                    className="bg-[#FFE814] hover:bg-[#FFE200] text-black rounded-xl md:rounded-full h-12 w-full md:w-12 mt-2 md:mt-0 flex items-center justify-center gap-2 font-semibold transition-colors"
                 >
+                    <span className="md:hidden">Search scholarships</span>
                     <ArrowRightIcon className="h-5 w-5" />
                 </button>
             </div>

@@ -3,6 +3,7 @@
 import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
+import { loginHref } from '../utils/authUtils';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -11,7 +12,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ 
   children, 
-  redirectTo = '/Authentication/login' 
+  redirectTo
 }: ProtectedRouteProps) => {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
@@ -19,7 +20,8 @@ const ProtectedRoute = ({
   useEffect(() => {
     // Only redirect once the auth state is loaded and user is not authenticated
     if (!loading && !isAuthenticated) {
-      router.push(redirectTo);
+      // Default: the login page, coming back here afterwards
+      router.push(redirectTo ?? loginHref());
     }
   }, [isAuthenticated, loading, redirectTo, router]);
 

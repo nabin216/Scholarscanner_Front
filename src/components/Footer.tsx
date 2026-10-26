@@ -19,6 +19,8 @@ const Footer: React.FC = () => {
                     <nav className="w-full md:w-auto">
                         {/* Mobile: Stacked vertical links */}
                         <div className="flex flex-col space-y-3 md:hidden text-sm">
+                            <Link href="/about" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">About</Link>
+                            <Link href="/admissions" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">Application Guide</Link>
                             <Link href="/help-center" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">Help Center</Link>
                             <Link href="/faq" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">FAQ</Link>
                             <Link href="/support-team" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">Support Team</Link>
@@ -30,6 +32,10 @@ const Footer: React.FC = () => {
                         
                         {/* Desktop: Horizontal links with separators */}
                         <div className="hidden md:block text-sm">
+                            <Link href="/about" className="text-gray-600 hover:text-gray-900 transition-colors">About</Link>
+                            <span className="mx-2 text-gray-400">·</span>
+                            <Link href="/admissions" className="text-gray-600 hover:text-gray-900 transition-colors">Application Guide</Link>
+                            <span className="mx-2 text-gray-400">·</span>
                             <Link href="/help-center" className="text-gray-600 hover:text-gray-900 transition-colors">Help Center</Link>
                             <span className="mx-2 text-gray-400">·</span>
                             <Link href="/faq" className="text-gray-600 hover:text-gray-900 transition-colors">FAQ</Link>
@@ -131,7 +137,7 @@ const Footer: React.FC = () => {
                                 <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Do you want to discover hidden scholarships and advice from others? Sign up now to unlock your future!</p>
                             </div>
                         </div>
-                        <Link href="/Authentication/login/" className="w-full bg-white text-sm font-medium px-6 py-3 rounded-md hover:bg-gray-50 active:bg-gray-100 transition-colors border border-gray-200 shadow-sm text-center">
+                        <Link href="/Authentication/register" className="w-full bg-white text-sm font-medium px-6 py-3 rounded-md hover:bg-gray-50 active:bg-gray-100 transition-colors border border-gray-200 shadow-sm text-center">
                             Join now
                         </Link>
                     </div>
@@ -145,7 +151,7 @@ const Footer: React.FC = () => {
                                 <p className="text-sm text-gray-600">Do you want to discover hidden scholarships and advice from others? Sign up now to unlock your future!</p>
                             </div>
                         </div>
-                        <Link href="/Authentication/login/" className="bg-white text-sm font-medium px-6 py-2 rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm flex-shrink-0 ml-4 text-center">
+                        <Link href="/Authentication/register" className="bg-white text-sm font-medium px-6 py-2 rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm flex-shrink-0 ml-4 text-center">
                             Join now
                         </Link>
                     </div>
@@ -153,7 +159,7 @@ const Footer: React.FC = () => {
 
                 {/* Copyright Section */}
                 <div className="text-center text-sm text-gray-500">
-                    ScholarScanner ©️
+                    © {new Date().getFullYear()} ScholarScanner. Scholarship details can change; always confirm on the provider&apos;s official website.
                 </div>
             </div>
         </footer>

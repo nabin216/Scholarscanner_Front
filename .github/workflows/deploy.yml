@@ -59,6 +59,8 @@ jobs:
           NEXT_PUBLIC_GOOGLE_CLIENT_ID: 604558986475-755fbv5bvlnamnhdm3fts9ck54ujbkv4.apps.googleusercontent.com
           NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI: https://scholarscanner.com/Authentication/google-callback
           NEXT_PUBLIC_ENABLE_SOCIAL_AUTH: "true"
+          # Google AdSense publisher id (ca-pub-...), set as a repository variable once AdSense gives it to you
+          NEXT_PUBLIC_ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT }}
       
       - name: Add .nojekyll and CNAME
         run: |

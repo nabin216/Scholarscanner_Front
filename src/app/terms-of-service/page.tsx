@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const metadata = {
-  title: 'Terms of Service - Scholar Scanner',
+  title: 'Terms of Service',
   description: 'Terms of Service for Scholar Scanner - Rules and guidelines for using our platform',
 };
 
@@ -12,7 +12,7 @@ export default function TermsOfServicePage() {
         <div className="bg-white rounded-lg shadow-sm p-8 md:p-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Terms of Service</h1>
           <p className="text-sm text-gray-600 mb-8">
-            <strong>Last Updated:</strong> December 12, 2025
+            <strong>Last Updated:</strong> October 25, 2026
           </p>
 
           <div className="prose prose-blue max-w-none">

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const metadata = {
-  title: 'Privacy Policy - Scholar Scanner',
+  title: 'Privacy Policy',
   description: 'Privacy Policy for Scholar Scanner - How we collect, use, and protect your information',
 };
 
@@ -12,7 +12,7 @@ export default function PrivacyPolicyPage() {
         <div className="bg-white rounded-lg shadow-sm p-8 md:p-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Privacy Policy</h1>
           <p className="text-sm text-gray-600 mb-8">
-            <strong>Last Updated:</strong> December 12, 2025
+            <strong>Last Updated:</strong> October 25, 2026
           </p>
 
           <div className="prose prose-blue max-w-none">
@@ -175,8 +175,31 @@ export default function PrivacyPolicyPage() {
                 <li><strong>Preference Cookies:</strong> To remember your settings and preferences</li>
                 <li><strong>Social Media Cookies:</strong> To enable Facebook login and social sharing</li>
               </ul>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-gray-700 leading-relaxed mb-6">
                 You can control cookie settings through your browser preferences. However, disabling cookies may limit certain features of our Service.
+              </p>
+
+              <h3 className="text-xl font-semibold text-gray-800 mb-3">9.1 Advertising (Google AdSense)</h3>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                We show advertisements to keep ScholarScanner free for students. Ads are served by Google AdSense and its partners.
+              </p>
+              <ul className="list-disc pl-6 mb-4 space-y-2 text-gray-700">
+                <li>Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.</li>
+                <li>Google&apos;s use of advertising cookies enables it and its partners to serve ads to you based on your visits to this site and/or other sites on the Internet.</li>
+                <li>
+                  You may opt out of personalised advertising by visiting{' '}
+                  <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google Ads Settings</a>.
+                  You can also opt out of some third-party vendors&apos; use of cookies for personalised advertising at{' '}
+                  <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.aboutads.info</a>.
+                </li>
+                <li>
+                  Learn more about how Google uses information from sites that use its services at{' '}
+                  <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">policies.google.com/technologies/partner-sites</a>.
+                </li>
+                <li>Visitors in the European Economic Area, the United Kingdom and Switzerland are asked for consent before personalised ads are shown.</li>
+              </ul>
+              <p className="text-gray-700 leading-relaxed">
+                We do not share your account details (such as your name or email address) with advertisers.
               </p>
             </section>
 
@@ -186,7 +209,7 @@ export default function PrivacyPolicyPage() {
               <p className="text-gray-700 mb-3">Our Service integrates with third-party services, including:</p>
               <ul className="list-disc pl-6 mb-4 space-y-2 text-gray-700">
                 <li><strong>Facebook/Meta:</strong> For social login, page integration, and Graph API access</li>
-                <li><strong>Google:</strong> For OAuth authentication and analytics</li>
+                <li><strong>Google:</strong> For OAuth authentication, analytics and advertising (Google AdSense)</li>
                 <li><strong>n8n:</strong> For workflow automation and data synchronization</li>
                 <li><strong>AWS SES:</strong> For email delivery and notifications</li>
                 <li><strong>Cloud Hosting Providers:</strong> For infrastructure and data storage</li>
@@ -281,7 +304,7 @@ export default function PrivacyPolicyPage() {
           {/* Footer */}
           <div className="mt-12 pt-8 border-t border-gray-200">
             <p className="text-sm text-gray-600 text-center">
-              This Privacy Policy is effective as of December 12, 2025, and will remain in effect except with respect to any changes in its provisions in the future, which will be in effect immediately after being posted on this page.
+              This Privacy Policy is effective as of October 25, 2026, and will remain in effect except with respect to any changes in its provisions in the future, which will be in effect immediately after being posted on this page.
             </p>
           </div>
         </div>

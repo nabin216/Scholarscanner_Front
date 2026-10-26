@@ -1,6 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'Help Center',
+  description: 'Guides and help for using ScholarScanner: searching scholarships, saving them, tracking applications and managing your account.',
+};
+
 const HelpCenter = () => {
   return (
     <div className="min-h-screen bg-gray-50">

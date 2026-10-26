@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { ApiService } from '../../../services/apiService';
+import { getPostLoginRedirect, rememberPostLoginRedirect } from '../utils/authUtils';
 
 interface UserProfile {
   bio?: string;
@@ -142,6 +143,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkAuth();
   }, []);
   const loginWithGoogle = async (): Promise<void> => {
+    // Keep ?next= for the case where Google finishes in this window instead of the popup
+    rememberPostLoginRedirect();
     // Open Google OAuth popup
     const width = 500;
     const height = 600;
@@ -170,7 +173,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (popup) popup.close();
           try {
           await handleGoogleCallback(event.data.token, event.data.user);
-          router.push('/profile');
+          router.push(getPostLoginRedirect());
         } catch (error) {
           console.error('Google auth callback error:', error);
         }      }

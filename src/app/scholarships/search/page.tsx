@@ -6,6 +6,7 @@ import { Scholarship, Filters, SortConfig } from '../../../types/scholarship';
 import { FilterOptions } from '../../../types/filterOptions';
 import Link from 'next/link';
 import { useAuth } from '../../Authentication/context/AuthContext';
+import { loginHref } from '../../Authentication/utils/authUtils';
 
 const PAGE_SIZE = 20;
 
@@ -187,7 +188,7 @@ const ScholarshipSearchContent = () => {
 
   const handleSaveScholarship = async (scholarshipId: number) => {
     if (!isAuthenticated) {
-      alert('Please log in to save scholarships');
+      router.push(loginHref());
       return;
     }
 
@@ -201,7 +202,7 @@ const ScholarshipSearchContent = () => {
 
       if (savedScholarships.has(scholarshipId)) {
         // Remove from saved
-        const savedResponse = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
+        const savedResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -213,7 +214,7 @@ const ScholarshipSearchContent = () => {
           
           if (savedItem) {
             const deleteResponse = await fetch(
-              `http://localhost:8000/api/user/saved-scholarships/${savedItem.id}/`,
+              `${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/${savedItem.id}/`,
               {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -231,7 +232,7 @@ const ScholarshipSearchContent = () => {
         }
       } else {
         // Add to saved
-        const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,

@@ -1,6 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'Frequently Asked Questions',
+  description: 'Answers to common questions about finding scholarships, eligibility, deadlines and using ScholarScanner.',
+};
+
 const FAQ = () => {
   const faqData = [
     {

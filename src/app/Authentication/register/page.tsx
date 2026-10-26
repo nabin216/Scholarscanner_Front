@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 import { ApiService } from '../../../services/apiService';
+import { getPostLoginRedirect } from '../utils/authUtils';
 
 interface FormData {
   fullName: string;
@@ -152,11 +153,11 @@ export default function RegisterPage() {
         }
       }
 
-      setSuccess('Registration successful! Redirecting to your profile...');
+      setSuccess('Registration successful! Redirecting...');
       
       // Redirect after a short delay
       setTimeout(() => {
-        router.push('/profile');
+        router.push(getPostLoginRedirect());
       }, 2000);
       
     } catch (err) {

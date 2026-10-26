@@ -67,7 +67,7 @@ const ProfilePage = () => {
   // Redirect if not authenticated
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.push('/Authentication/login');
+      router.push('/Authentication/login?next=/profile');
     }
   }, [loading, isAuthenticated, router]);
     const fetchUserProfile = async () => {

@@ -1,6 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'How It Works',
+  description: 'How ScholarScanner helps you find, compare and track international scholarships, from search filters to the AI assistant.',
+};
+
 const HowItWorks = () => {
   const steps = [
     {
@@ -52,7 +57,7 @@ const HowItWorks = () => {
   const features = [
     {
       title: "Smart Matching Algorithm",
-      description: "Our AI analyzes thousands of data points to find scholarships you're most likely to win.",
+      description: "Filter by country, study level, field and funding, or describe what you want to our AI assistant and get matching scholarships in seconds.",
       icon: (
         <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -61,7 +66,7 @@ const HowItWorks = () => {
     },
     {
       title: "Comprehensive Database",
-      description: "Access thousands of scholarships from universities, organizations, and foundations.",
+      description: "Prestigious scholarships from governments, universities and foundations, each with the deadline, value, eligibility and official link in one place.",
       icon: (
         <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
@@ -164,23 +169,23 @@ const HowItWorks = () => {
 
         {/* Statistics */}
         <div className="bg-blue-600 rounded-lg p-8 mb-16 text-white">
-          <h2 className="text-2xl font-bold mb-8 text-center">Our Impact</h2>
-          <div className="grid md:grid-cols-4 gap-6">
+          <h2 className="text-2xl font-bold mb-8 text-center">What you get</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold mb-2">50,000+</div>
-              <div className="text-blue-100">Active Students</div>
+              <div className="text-3xl font-bold mb-2">100+</div>
+              <div className="text-blue-100">Prestigious scholarships</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold mb-2">$100M+</div>
-              <div className="text-blue-100">Scholarships Awarded</div>
+              <div className="text-3xl font-bold mb-2">30+</div>
+              <div className="text-blue-100">Host countries</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold mb-2">5,000+</div>
-              <div className="text-blue-100">Available Scholarships</div>
+              <div className="text-3xl font-bold mb-2">24/7</div>
+              <div className="text-blue-100">AI assistant</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold mb-2">95%</div>
-              <div className="text-blue-100">Student Satisfaction</div>
+              <div className="text-3xl font-bold mb-2">Free</div>
+              <div className="text-blue-100">For every student</div>
             </div>
           </div>
         </div>
@@ -220,7 +225,7 @@ const HowItWorks = () => {
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-8 text-white text-center">
           <h2 className="text-2xl font-bold mb-4">Ready to Find Your Perfect Scholarship?</h2>
           <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-            Join thousands of students who have already discovered their ideal scholarships through ScholarScanner.
+            Create a free account to save scholarships, track applications and get personalised recommendations from our AI assistant.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/Authentication/register" className="bg-white text-blue-600 px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium">

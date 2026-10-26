@@ -28,6 +28,34 @@ export const removeToken = (): void => {
   localStorage.removeItem('authToken');
 };
 
+const POST_LOGIN_KEY = 'postLoginRedirect';
+
+// Only allow same-site paths, and never send the user back to an auth page
+const isSafeRedirect = (path: string | null): path is string =>
+  !!path && path.startsWith('/') && !path.startsWith('//') && !path.startsWith('/Authentication');
+
+// Remember the ?next= page before leaving for an external login (e.g. the Google redirect flow)
+export const rememberPostLoginRedirect = (): void => {
+  if (typeof window === 'undefined') return;
+  const next = new URLSearchParams(window.location.search).get('next');
+  if (isSafeRedirect(next)) sessionStorage.setItem(POST_LOGIN_KEY, next);
+};
+
+// Where to go after logging in: the page the user came from (?next=...), otherwise the homepage
+export const getPostLoginRedirect = (): string => {
+  if (typeof window === 'undefined') return '/';
+  const next = new URLSearchParams(window.location.search).get('next') || sessionStorage.getItem(POST_LOGIN_KEY);
+  sessionStorage.removeItem(POST_LOGIN_KEY);
+  return isSafeRedirect(next) ? next : '/';
+};
+
+// Login link that brings the user back to the current page afterwards
+export const loginHref = (): string => {
+  if (typeof window === 'undefined') return '/Authentication/login';
+  const here = window.location.pathname + window.location.search;
+  return isSafeRedirect(here) && here !== '/' ? `/Authentication/login?next=${encodeURIComponent(here)}` : '/Authentication/login';
+};
+
 // Get authentication headers for API requests
 export const getAuthHeaders = (): { 'Authorization': string } | undefined => {
   const token = getToken();

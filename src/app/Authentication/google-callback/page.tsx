@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { getPostLoginRedirect } from '../utils/authUtils';
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function GoogleCallbackPage() {
               }, window.location.origin);
               window.close();            } else {
               // We're not in a popup - redirect
-              router.push('/profile');
+              router.push(getPostLoginRedirect());
             }
           })
           .catch(error => {

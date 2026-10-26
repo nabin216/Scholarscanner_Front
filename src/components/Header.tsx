@@ -174,7 +174,10 @@ const Header: React.FC = () => {
                             Scholarships
                         </Link>
                         <Link href="/admissions" className="text-gray-700 hover:text-primary-600 text-sm font-medium transition-colors">
-                            Admissions
+                            How to Apply
+                        </Link>
+                        <Link href="/about" className="text-gray-700 hover:text-primary-600 text-sm font-medium transition-colors">
+                            About
                         </Link>
                     </nav>
                 </div>
@@ -269,7 +272,14 @@ const Header: React.FC = () => {
                                 className="text-gray-700 hover:text-primary-600 font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors"
                                 onClick={() => setIsMenuOpen(false)}
                             >
-                                Admissions
+                                How to Apply
+                            </Link>
+                            <Link 
+                                href="/about" 
+                                className="text-gray-700 hover:text-primary-600 font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                About
                             </Link>
                             
                             {/* Show auth buttons only if not authenticated */}

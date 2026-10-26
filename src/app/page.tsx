@@ -20,7 +20,30 @@ import Image5  from '../../public/images/engineering.jpg'
 import Image6  from '../../public/images/phd.jpg'    
 
 
-const HomePage = () => {
+// Numbers shown on the homepage, read from the API when the static site is built
+const getStats = async () => {
+    try {
+        const all: { country_name: string; fund_type: { name: string }[] }[] = [];
+        let url: string | null = `${process.env.NEXT_PUBLIC_API_URL}/scholarships/?page_size=100`;
+        while (url) {
+            const res: Response = await fetch(url, { cache: 'force-cache' });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            all.push(...data.results);
+            url = data.next;
+        }
+        return {
+            total: all.length,
+            countries: new Set(all.map((s) => s.country_name)).size,
+            fullyFunded: all.filter((s) => s.fund_type.some((f) => f.name === 'Full Funding')).length,
+        };
+    } catch {
+        return { total: null, countries: null, fullyFunded: null };
+    }
+};
+
+const HomePage = async () => {
+    const live = await getStats();
     const features = [
         {
             icon: MagnifyingGlassIcon,
@@ -40,44 +63,25 @@ const HomePage = () => {
     ];
 
     const stats = [
-        { number: '10,000+', label: 'Available Scholarships' },
-        { number: '50,000+', label: 'Students Helped' },
-        { number: '$100M+', label: 'Scholarships Awarded' },
-        { number: '500+', label: 'Partner Universities' }
+        { number: live.total ? `${live.total}` : '100+', label: 'Scholarships listed' },
+        { number: live.countries ? `${live.countries}` : '30+', label: 'Host countries' },
+        { number: live.fullyFunded ? `${live.fullyFunded}` : '70+', label: 'Fully funded options' },
+        { number: '100%', label: 'Free for students' }
     ];
 
-    const testimonials = [
-        {
-            name: 'Sarah Johnson',
-            role: 'Engineering Student',
-            content: 'ScholarScanner helped me find the perfect scholarship for my computer science degree. The process was so simple!',
-            rating: 5
-        },
-        {
-            name: 'Michael Chen',
-            role: 'Medical Student',
-            content: 'I never thought I could afford medical school until I found three scholarships through this platform.',
-            rating: 5
-        },
-        {
-            name: 'Emily Rodriguez',
-            role: 'Business Student',
-            content: 'The AI recommendations were spot-on. I got matched with scholarships I never would have found on my own.',
-            rating: 5
-        }
-    ];    return (
+    return (
         <div className="mx-4 md:mx-8 lg:mx-12">
               {/* Hero Section */}
             <section className="relative z-0">
                 <div className="relative bg-cover bg-center rounded-none py-16" style={{ 
                     backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 15%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.1) 85%, rgba(0,0,0,0.5) 100%), url("${basePath}/images/university.jpg")`
                 }}>                    <div className="container mx-auto">
-                        <div className="text-center mb-16">
-                            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                        <div className="text-center mb-16 mx-auto max-w-3xl rounded-2xl bg-white/80 backdrop-blur-sm px-5 py-6 sm:px-8 shadow-sm">
+                            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
                                 Find your scholarship with ScholarScanner
                             </h1>
-                            <p className="text-lg text-gray-600">
-                                Discover thousands of opportunities worldwide!
+                            <p className="text-base sm:text-lg text-gray-700">
+                                Search fully funded and partial scholarships from governments, universities and foundations worldwide.
                             </p>
                         </div>
                     </div>
@@ -89,9 +93,9 @@ const HomePage = () => {
                 {/* Featured Scholarships */}
             <section className="py-12 z-0">
                 <div className="container mx-auto">
-                    <h2 className="text-2xl font-semibold mb-8">Featured scholarships</h2>
+                    <h2 className="text-2xl font-semibold mb-8">Browse by study level and field</h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        <Link href="/scholarships/search?education_level=undergraduate" className="relative aspect-[3/3.5] group cursor-pointer">
+                        <Link href="/scholarships/search?levels=Bachelor" className="relative aspect-[3/3.5] group cursor-pointer">
                             <img src={Imagr1.src} alt="Undergraduate" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                             <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium group-hover:bg-blue-50 transition-colors">
                                 Undergraduate
@@ -101,14 +105,14 @@ const HomePage = () => {
                         
                         {/* 2nd card split into two parts */}
                         <div className="grid grid-rows-2 gap-3">
-                            <Link href="/scholarships/search?education_level=masters" className="relative aspect-[3/1.7] group cursor-pointer">
+                            <Link href="/scholarships/search?levels=Master" className="relative aspect-[3/1.7] group cursor-pointer">
                                 <img src={Imagr2.src} alt="Master's" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                                 <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium group-hover:bg-blue-50 transition-colors">
                                     Master's
                                 </div>
                                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-300"></div>
                             </Link>
-                            <Link href="/scholarships/search?field_of_study=research" className="relative aspect-[3/1.7] group cursor-pointer">
+                            <Link href="/scholarships/search?scholarship_category=Research" className="relative aspect-[3/1.7] group cursor-pointer">
                                 <img src={Imagr4.src} alt="Research" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                                 <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium group-hover:bg-blue-50 transition-colors">
                                     Research
@@ -118,15 +122,15 @@ const HomePage = () => {
                         </div>
                         {/* 4th card split into two parts */}
                         <div className="grid grid-rows-2 gap-3">
-                            <Link href="/scholarships/search?field_of_study=medicine" className="relative aspect-[3/1.7] group cursor-pointer">
-                            <img src={Imagr3.src} alt="PhD" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                            <Link href="/scholarships/search?field_of_study=Natural%20Sciences" className="relative aspect-[3/1.7] group cursor-pointer">
+                            <img src={Imagr3.src} alt="Natural sciences" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                                 <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium group-hover:bg-blue-50 transition-colors">
-                                    Medical School
+                                    Natural Sciences
                                 </div>
                                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-300"></div>
                             </Link>
-                            <Link href="/scholarships/search?field_of_study=engineering" className="relative aspect-[3/1.7] group cursor-pointer">
-                            <img src={Image5.src} alt="PhD" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                            <Link href="/scholarships/search?field_of_study=Engineering" className="relative aspect-[3/1.7] group cursor-pointer">
+                            <img src={Image5.src} alt="Engineering" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                                 <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium group-hover:bg-blue-50 transition-colors">
                                     Engineering
                                 </div>
@@ -134,7 +138,7 @@ const HomePage = () => {
                             </Link>
                         </div>
                         
-                        <Link href="/scholarships/search?education_level=phd" className="relative aspect-[3/3.5] group cursor-pointer">
+                        <Link href="/scholarships/search?levels=PhD" className="relative aspect-[3/3.5] group cursor-pointer">
                             <img src={Image6.src} alt="PhD" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                             <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium group-hover:bg-blue-50 transition-colors">
                                 PhD
@@ -148,8 +152,10 @@ const HomePage = () => {
             </section>{/* Top Scholarship Providers */}
             <section className="py-12 bg-gray-50">
                 <div className="container mx-auto">
-                    <h2 className="text-2xl font-semibold mb-8">Top scholarship providers</h2>
-                    {/* FeaturedProviders component with horizontal scroll for > 5 items */}
+                    <div className="flex items-end justify-between gap-4 mb-6">
+                        <h2 className="text-2xl font-semibold">Top scholarships</h2>
+                        <Link href="/scholarships/search" className="text-sm font-medium text-blue-600 hover:text-blue-800 whitespace-nowrap">View all →</Link>
+                    </div>
                     <FeaturedProviders />
                 </div>
             </section>
@@ -178,7 +184,7 @@ const HomePage = () => {
                             Why Choose ScholarScanner?
                         </h2>
                         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                            Our platform combines cutting-edge technology with comprehensive scholarship databases to give you the best chance of success.
+                            We collect prestigious scholarships from official sources, keep the key facts in one place, and help you shortlist the right ones faster.
                         </p>
                     </div>
 
@@ -204,10 +210,10 @@ const HomePage = () => {
                         Ready to Find Your Scholarship?
                     </h2>
                     <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-                        Join thousands of students who have already found their perfect scholarship match. It's free and takes less than 5 minutes to get started.
+                        Create a free account to save scholarships, track your applications and ask our AI assistant for personalised recommendations.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/Authentication/login">
+                        <Link href="/Authentication/register">
                             <Button 
                                 size="xl" 
                                 variant="secondary"
@@ -227,8 +233,6 @@ const HomePage = () => {
                         </Link>
                     </div>                </div>
             </section>
-            {/* Hidden deployment version marker */}
-            <div className="hidden" data-deployment-version="2025-12-09-v2"></div>
         </div>
     );
 };

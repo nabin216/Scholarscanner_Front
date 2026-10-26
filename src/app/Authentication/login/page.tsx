@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import GoogleSignInButton from '../components/GoogleSignInButton';
+import { getPostLoginRedirect } from '../utils/authUtils';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -19,8 +20,8 @@ export default function LoginPage() {
     setIsSubmitting(true);
     try {
       await login(email, password);
-      // Redirect to profile page
-      router.push('/profile');
+      // Back to the page the user came from, or the homepage
+      router.push(getPostLoginRedirect());
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during login');
     } finally {
