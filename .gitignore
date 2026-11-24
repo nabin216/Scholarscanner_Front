@@ -67,6 +67,3 @@ dist/
 # stale build artifacts
 frontend-deploy.tar.gz
 deployed-page.html
-
-# Scholarship snapshot downloaded before each build (scripts/fetch-scholarships.mjs)
-/.cache/

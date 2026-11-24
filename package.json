@@ -7,7 +7,6 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/fetch-scholarships.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",

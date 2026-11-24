@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 
 export const metadata = {
-  alternates: { canonical: '/faq/' },
   title: 'Frequently Asked Questions',
   description: 'Answers to common questions about finding scholarships, eligibility, deadlines and using ScholarScanner.',
 };

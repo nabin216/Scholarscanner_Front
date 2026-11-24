@@ -659,7 +659,7 @@ const ScholarshipSearchContent = () => {
 
                           {/* Scholarship content */}
                           <Link 
-                            href={`/scholarships/${scholarship.slug}/`}
+                            href={`/scholarships/scholarshipdetails?id=${scholarship.slug}`}
                             className="block pt-2 pb-2"
                           >
                             <div className="flex pb-3 pr-3 pt-2 pl-3">
@@ -765,7 +765,7 @@ const ScholarshipSearchContent = () => {
                           <div className="flex-1 flex flex-col">
                             {/* Link to scholarship details */}
                             <Link 
-                              href={`/scholarships/${scholarship.slug}/`}
+                              href={`/scholarships/scholarshipdetails?id=${scholarship.slug}`}
                               className="flex-1 p-4 pb-2"
                             >
                               <div className="flex flex-col space-y-2">

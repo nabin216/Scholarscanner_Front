@@ -11,12 +11,12 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://scholarscanner.com
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || 'ca-pub-3332315663614383';
 
 const DESCRIPTION =
-  'ScholarScanner, the scholarship scanner for international students: search 1,000+ fully funded and partial bachelor’s, master’s and PhD scholarships abroad.';
+  'Find fully funded and partial scholarships for bachelor’s, master’s and PhD study abroad. Search prestigious government, university and foundation scholarships by country, level and field, with deadlines and official links.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'ScholarScanner (Scholarship Scanner) – Find Fully Funded Scholarships',
+    default: 'ScholarScanner - Find Fully Funded Scholarships Worldwide',
     template: '%s | ScholarScanner',
   },
   description: DESCRIPTION,
@@ -43,17 +43,16 @@ export const metadata: Metadata = {
   },
   manifest: '/site.webmanifest',
   openGraph: {
-    title: 'ScholarScanner (Scholarship Scanner) – Find Fully Funded Scholarships',
+    title: 'ScholarScanner - Find Fully Funded Scholarships Worldwide',
     description: DESCRIPTION,
     url: SITE_URL,
     siteName: 'ScholarScanner',
     type: 'website',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'ScholarScanner – find fully funded scholarships worldwide' }],
+    images: ['/android-chrome-512x512.png'],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'ScholarScanner (Scholarship Scanner) – Find Fully Funded Scholarships',
-    images: ['/og-image.png'],
+    card: 'summary',
+    title: 'ScholarScanner - Find Fully Funded Scholarships Worldwide',
     description: DESCRIPTION,
   },
   robots: { index: true, follow: true },

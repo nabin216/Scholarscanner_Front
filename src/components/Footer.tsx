@@ -1,7 +1,6 @@
 import basePath from '@/lib/basePath'
 import React from 'react';
 import Link from 'next/link';
-import { LANDING_LINKS } from '@/lib/landingSlugs';
 
 const Footer: React.FC = () => {
     return (
@@ -13,9 +12,7 @@ const Footer: React.FC = () => {
                         <Link href="/" className="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
                             ScholarScanner
                         </Link>
-                        <p className="mt-1 max-w-xs text-sm text-gray-500">
-                            ScholarScanner, the scholarship scanner for international students.
-                        </p>
+
                     </div>
                     
                     {/* Navigation Links - Mobile Responsive */}
@@ -55,20 +52,6 @@ const Footer: React.FC = () => {
                         </div>
                     </nav>
                 </div>
-
-                {/* Scholarship lists: every page links to the landing pages */}
-                <nav aria-label="Scholarship lists" className="mb-6 sm:mb-8">
-                    <p className="text-sm font-semibold text-gray-900 mb-2">Browse scholarships</p>
-                    <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-                        {LANDING_LINKS.map((l) => (
-                            <li key={l.slug}>
-                                <Link href={`/scholarships/${l.slug}/`} className="text-gray-600 hover:text-gray-900 transition-colors">
-                                    {l.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
 
                 {/* Social Media Section */}
                 <div className="mb-6 sm:mb-8">

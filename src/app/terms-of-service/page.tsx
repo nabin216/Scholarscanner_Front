@@ -1,7 +1,6 @@
 import React from 'react';
 
 export const metadata = {
-  alternates: { canonical: '/terms-of-service/' },
   title: 'Terms of Service',
   description: 'Terms of Service for Scholar Scanner - Rules and guidelines for using our platform',
 };

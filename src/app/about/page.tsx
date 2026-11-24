@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 
 export const metadata = {
-  alternates: { canonical: '/about/' },
   title: 'About Us',
   description:
     'ScholarScanner is a free scholarship search platform that helps students find fully funded and partial scholarships from governments, universities and foundations worldwide.',

@@ -1,7 +1,8 @@
 import type { MetadataRoute } from 'next';
-import { SITE_URL } from '@/lib/seo';
 
 export const dynamic = 'force-static';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://scholarscanner.com';
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -9,9 +10,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        // Account pages have no public content. /Authentication/ is deliberately NOT blocked:
-        // Google has to crawl the login and register pages to see their noindex tag.
-        disallow: ['/profile/'],
+        // Account pages have no public content
+        disallow: ['/profile/', '/Authentication/'],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

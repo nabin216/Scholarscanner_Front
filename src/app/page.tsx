@@ -20,50 +20,18 @@ import Image5  from '../../public/images/engineering.jpg'
 import Image6  from '../../public/images/phd.jpg'    
 
 
-import type { Metadata } from 'next';
-import { LANDING_LINKS } from '@/lib/landingSlugs';
-import { SITE_URL, jsonLd } from '@/lib/seo';
-import { getAllScholarships } from '@/lib/scholarshipData';
-
-export const metadata: Metadata = {
-    alternates: { canonical: '/' },
-};
-
-// Tells Google that "ScholarScanner" and "Scholarship Scanner" are this site, and which social
-// profiles belong to it. Keep sameAs in sync with the links in the footer.
-const BRAND_JSON_LD = {
-    '@context': 'https://schema.org',
-    '@graph': [
-        {
-            '@type': 'Organization',
-            '@id': `${SITE_URL}/#organization`,
-            name: 'ScholarScanner',
-            alternateName: 'Scholarship Scanner',
-            url: `${SITE_URL}/`,
-            logo: `${SITE_URL}/android-chrome-512x512.png`,
-            sameAs: [
-                'https://facebook.com/ScholarScanner',
-                'https://linkedin.com/company/ScholarScanner',
-                'https://x.com/ScholarScanner',
-                'https://instagram.com/ScholarScanner',
-                'https://t.me/scholarscanner',
-            ],
-        },
-        {
-            '@type': 'WebSite',
-            '@id': `${SITE_URL}/#website`,
-            name: 'ScholarScanner',
-            alternateName: 'Scholarship Scanner',
-            url: `${SITE_URL}/`,
-            publisher: { '@id': `${SITE_URL}/#organization` },
-        },
-    ],
-};
-
 // Numbers shown on the homepage, read from the API when the static site is built
 const getStats = async () => {
     try {
-        const all = await getAllScholarships();
+        const all: { country_name: string; fund_type: { name: string }[] }[] = [];
+        let url: string | null = `${process.env.NEXT_PUBLIC_API_URL}/scholarships/?page_size=100`;
+        while (url) {
+            const res: Response = await fetch(url, { cache: 'force-cache' });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            all.push(...data.results);
+            url = data.next;
+        }
         return {
             total: all.length,
             countries: new Set(all.map((s) => s.country_name)).size,
@@ -110,7 +78,6 @@ const HomePage = async () => {
 
     return (
         <div className="mx-4 md:mx-8 lg:mx-12">
-            <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(BRAND_JSON_LD)} />
               {/* Hero Section */}
             <section className="relative z-0">
                 <div className="relative bg-cover bg-center rounded-none py-16" style={{ 
@@ -121,7 +88,7 @@ const HomePage = async () => {
                                 Find your scholarship with ScholarScanner
                             </h1>
                             <p className="text-base sm:text-lg text-gray-700">
-                                ScholarScanner, the scholarship scanner for international students: search fully funded and partial scholarships from governments, universities and foundations worldwide.
+                                Search fully funded and partial scholarships from governments, universities and foundations worldwide.
                             </p>
                         </div>
                     </div>
@@ -135,7 +102,7 @@ const HomePage = async () => {
                 <div className="container mx-auto">
                     <h2 className="text-2xl font-semibold mb-8">Browse by study level and field</h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        <Link href="/scholarships/bachelors/" className="relative aspect-[3/3.5] group cursor-pointer">
+                        <Link href="/scholarships/search?levels=Bachelor" className="relative aspect-[3/3.5] group cursor-pointer">
                             <img src={Imagr1.src} alt="Undergraduate" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                             <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium group-hover:bg-blue-50 transition-colors">
                                 Undergraduate
@@ -145,7 +112,7 @@ const HomePage = async () => {
                         
                         {/* 2nd card split into two parts */}
                         <div className="grid grid-rows-2 gap-3">
-                            <Link href="/scholarships/masters/" className="relative aspect-[3/1.7] group cursor-pointer">
+                            <Link href="/scholarships/search?levels=Master" className="relative aspect-[3/1.7] group cursor-pointer">
                                 <img src={Imagr2.src} alt="Master's" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                                 <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium group-hover:bg-blue-50 transition-colors">
                                     Master's
@@ -169,7 +136,7 @@ const HomePage = async () => {
                                 </div>
                                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-300"></div>
                             </Link>
-                            <Link href="/scholarships/engineering/" className="relative aspect-[3/1.7] group cursor-pointer">
+                            <Link href="/scholarships/search?field_of_study=Engineering" className="relative aspect-[3/1.7] group cursor-pointer">
                             <img src={Image5.src} alt="Engineering" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                                 <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium group-hover:bg-blue-50 transition-colors">
                                     Engineering
@@ -178,7 +145,7 @@ const HomePage = async () => {
                             </Link>
                         </div>
                         
-                        <Link href="/scholarships/phd/" className="relative aspect-[3/3.5] group cursor-pointer">
+                        <Link href="/scholarships/search?levels=PhD" className="relative aspect-[3/3.5] group cursor-pointer">
                             <img src={Image6.src} alt="PhD" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                             <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium group-hover:bg-blue-50 transition-colors">
                                 PhD
@@ -189,23 +156,7 @@ const HomePage = async () => {
                         
                     </div>
                 </div>
-            </section>
-            {/* Popular lists: crawlable links to the landing pages */}
-            <section className="pb-12">
-                <div className="container mx-auto">
-                    <h2 className="text-2xl font-semibold mb-4">Popular scholarship lists</h2>
-                    <ul className="flex flex-wrap gap-2">
-                        {LANDING_LINKS.map((l) => (
-                            <li key={l.slug}>
-                                <Link href={`/scholarships/${l.slug}/`} className="inline-block rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 hover:border-blue-300 hover:text-blue-700">
-                                    {l.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </section>
-            {/* Top Scholarship Providers */}
+            </section>{/* Top Scholarship Providers */}
             <section className="py-12 bg-gray-50">
                 <div className="container mx-auto">
                     <div className="flex items-end justify-between gap-4 mb-6">
