@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 export const metadata = {
+  alternates: { canonical: '/help-center/' },
   title: 'Help Center',
   description: 'Guides and help for using ScholarScanner: searching scholarships, saving them, tracking applications and managing your account.',
 };

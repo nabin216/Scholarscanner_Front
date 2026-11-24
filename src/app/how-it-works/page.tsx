@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 export const metadata = {
+  alternates: { canonical: '/how-it-works/' },
   title: 'How It Works',
   description: 'How ScholarScanner helps you find, compare and track international scholarships, from search filters to the AI assistant.',
 };

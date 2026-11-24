@@ -338,7 +338,7 @@ export default function SavedScholarshipsPage() {
                         <td className="px-6 py-4">
                           <div className="text-sm font-medium text-gray-900">
                             <Link 
-                              href={`/scholarships/scholarshipdetails?id=${scholarshipDetails.slug}`}
+                              href={`/scholarships/${scholarshipDetails.slug}/`}
                               className="hover:text-blue-600"
                             >
                               {scholarshipDetails.title}
@@ -373,7 +373,7 @@ export default function SavedScholarshipsPage() {
                         <td className="px-6 py-4 text-center">
                           <div className="flex justify-center space-x-2">
                             <Link 
-                              href={`/scholarships/scholarshipdetails?id=${scholarshipDetails.slug}`}
+                              href={`/scholarships/${scholarshipDetails.slug}/`}
                               className="text-blue-600 hover:text-blue-900 p-1"
                               title="View Details"
                             >

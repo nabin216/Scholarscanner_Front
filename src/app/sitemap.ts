@@ -1,54 +1,54 @@
 import type { MetadataRoute } from 'next';
+import { getAllScholarships } from '@/lib/scholarshipData';
+import { LANDING_PAGES } from '@/lib/landingPages';
+import { landingScholarships } from '@/lib/scholarshipQueries';
+import { LANDING_PAGE_SIZE, landingPagePath } from '@/components/scholarship/LandingView';
+import { absoluteUrl, scholarshipPath } from '@/lib/seo';
 
 export const dynamic = 'force-static';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://scholarscanner.com';
-
+// Public, indexable pages only: no login/register/profile pages and no query-string URLs
 const STATIC_PAGES = [
   { path: '/', priority: 1 },
-  { path: '/scholarships/search/', priority: 0.9 },
-  { path: '/admissions/', priority: 0.7 },
+  { path: '/scholarships/search/', priority: 0.8 },
+  { path: '/admissions/', priority: 0.6 },
   { path: '/about/', priority: 0.5 },
   { path: '/how-it-works/', priority: 0.5 },
   { path: '/faq/', priority: 0.5 },
   { path: '/help-center/', priority: 0.4 },
   { path: '/get-in-touch/', priority: 0.4 },
+  { path: '/support-team/', priority: 0.3 },
   { path: '/privacy-policy/', priority: 0.2 },
   { path: '/terms-of-service/', priority: 0.2 },
 ];
 
-// Every scholarship detail page, read from the API when the site is built
-const fetchScholarships = async (): Promise<{ slug: string; updated_at: string }[]> => {
-  const all: { slug: string; updated_at: string }[] = [];
-  let url: string | null = `${process.env.NEXT_PUBLIC_API_URL}/scholarships/?page_size=100&ordering=deadline`;
-  try {
-    while (url) {
-      const res: Response = await fetch(url, { cache: 'force-cache' });
-      if (!res.ok) break;
-      const data = await res.json();
-      all.push(...(data.results || []));
-      url = data.next;
-    }
-  } catch {
-    // Build without scholarship URLs rather than failing the deploy
-  }
-  return all;
-};
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
-  const scholarships = await fetchScholarships();
+  const all = await getAllScholarships();
+  const latest = all.reduce((max, s) => (s.updated_at > max ? s.updated_at : max), '');
+  const siteUpdated = latest ? new Date(latest) : new Date();
 
-  return [
-    ...STATIC_PAGES.map((page) => ({
-      url: `${SITE_URL}${page.path}`,
-      lastModified: now,
-      priority: page.priority,
-    })),
-    ...scholarships.map((s) => ({
-      url: `${SITE_URL}/scholarships/scholarshipdetails/?id=${s.slug}`,
-      lastModified: new Date(s.updated_at),
-      priority: 0.8,
-    })),
+  const entries: MetadataRoute.Sitemap = [
+    ...STATIC_PAGES.map((p) => ({ url: absoluteUrl(p.path), lastModified: siteUpdated, priority: p.priority })),
   ];
+
+  for (const landing of LANDING_PAGES) {
+    const list = landingScholarships(landing, all);
+    const pages = Math.max(1, Math.ceil(list.length / LANDING_PAGE_SIZE));
+    const updated = list.reduce((max, s) => (s.updated_at > max ? s.updated_at : max), '');
+    for (let page = 1; page <= pages; page++) {
+      entries.push({
+        url: absoluteUrl(landingPagePath(landing.slug, page)),
+        lastModified: updated ? new Date(updated) : siteUpdated,
+        priority: page === 1 ? 0.9 : 0.4,
+      });
+    }
+  }
+
+  for (const s of all) {
+    entries.push({ url: absoluteUrl(scholarshipPath(s.slug)), lastModified: new Date(s.updated_at), priority: 0.7 });
+  }
+
+  // One entry per URL
+  const seen = new Set<string>();
+  return entries.filter((e) => (seen.has(e.url) ? false : (seen.add(e.url), true)));
 }

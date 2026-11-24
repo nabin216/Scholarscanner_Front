@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 export const metadata = {
+  alternates: { canonical: '/admissions/' },
   title: 'How to Apply for Scholarships: Timeline, Documents and Tips',
   description:
     'A step-by-step guide to applying for international scholarships: when to start, which documents you need, how to write a motivation letter and how to prepare for interviews.',

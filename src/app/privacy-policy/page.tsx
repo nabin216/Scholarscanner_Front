@@ -1,6 +1,7 @@
 import React from 'react';
 
 export const metadata = {
+  alternates: { canonical: '/privacy-policy/' },
   title: 'Privacy Policy',
   description: 'Privacy Policy for Scholar Scanner - How we collect, use, and protect your information',
 };

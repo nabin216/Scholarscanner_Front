@@ -7,6 +7,7 @@ import { SparklesIcon, XMarkIcon, PaperAirplaneIcon, ArrowPathIcon } from '@hero
 import { useAuth } from '@/app/Authentication/context/AuthContext';
 import { loginHref } from '@/app/Authentication/utils/authUtils';
 import { markdownToHtml } from '@/lib/markdown';
+import { isLandingSlug } from '@/lib/landingSlugs';
 
 interface ScholarshipCard {
   id: number;
@@ -60,8 +61,10 @@ export default function AIAssistant() {
   const { user } = useAuth();
   const pathname = usePathname();
 
-  // The details page has its own action bar at the bottom on phones; sit above it
-  const raised = pathname?.startsWith('/scholarships/scholarshipdetails');
+  // Scholarship detail pages (/scholarships/<slug>/) have their own action bar at the bottom on
+  // phones; sit above it. Landing pages and search share the URL shape but have no bar.
+  const detailSlug = pathname?.match(/^\/scholarships\/([^/]+)\/?$/)?.[1];
+  const raised = !!detailSlug && detailSlug !== 'search' && detailSlug !== 'scholarshipdetails' && !isLandingSlug(detailSlug);
 
   useEffect(() => {
     setIsMounted(true);
@@ -288,7 +291,7 @@ export default function AIAssistant() {
                         {msg.scholarships.map((s) => (
                           <Link
                             key={s.id}
-                            href={`/scholarships/scholarshipdetails?id=${s.slug}`}
+                            href={`/scholarships/${s.slug}/`}
                             onClick={closeOnSmallScreens}
                             className="snap-start w-44 flex-shrink-0 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-100 hover:ring-indigo-300 transition"
                           >

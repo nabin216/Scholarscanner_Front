@@ -78,7 +78,7 @@ const FeaturedProviders = () => {
               return (
                 <Link
                   key={scholarship.id}
-                  href={`/scholarships/scholarshipdetails?id=${scholarship.slug}`}
+                  href={`/scholarships/${scholarship.slug}/`}
                   className="group flex flex-col rounded-xl bg-white shadow-sm ring-1 ring-gray-100 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
                 >
                   <div className="relative aspect-[16/10] bg-gray-100 overflow-hidden">

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import ContactForm from '@/components/ContactForm';
 
 export const metadata = {
+  alternates: { canonical: '/get-in-touch/' },
   title: 'Contact Us',
   description: 'Contact the ScholarScanner team with questions, corrections to scholarship details or partnership enquiries.',
 };
